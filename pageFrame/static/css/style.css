@@ -1,0 +1,101 @@
+/* 整体样式 */
+.content_background {
+    font-family: PingFangSC-Semibold, PingFang SC;
+    background-color:#22284A;
+    background-size:cover;
+}
+
+
+/*头部样式*/
+.header-info {
+    height:9rem;
+    background: url("../img/header_background.png") no-repeat center center;
+    background-size: 100% 100%;
+}
+
+.header-info .title-info {
+    height: 2em;
+    color: #03C2EC;
+    text-align: center;
+    font-size: 25px;
+    font-family: 'cuhei';
+    font-weight: 600;line-height: 2em;
+    vertical-align: middle;
+}
+
+
+.cust-type-default{float:right;cursor:pointer;width:62px;height:32px;line-height:27px;color:#14B4FE;border:1px solid #14B4FE;text-align:center;}
+.cust-type-default.left{border-radius:6px 0px 0px 6px;}
+.cust-type-default.right{border-radius:0px 6px 6px 0px;margin-right: 1rem;margin-bottom: 2rem;}
+.cust-type-default.active{background: #14B4FE;color:#fff;}
+
+/*------头部样式-------*/
+
+.btn:hover,
+.btn:focus {
+    outline: none;
+}
+
+/*数据模块样式*/
+.content_background .header-content {margin-bottom:10px;}
+.content_background .header-content .col-sm-3.col-md-3.pd{padding:0px;margin:0px;}
+.content_background .header-content .col-sm-4.col-md-4.pd{padding:0px;margin:0px;}
+.content_background .header-content .col-sm-5.col-md-5.pd{padding:0px;margin:0px;}
+.content_background .header-content .col-sm-6.col-md-6.pd{padding:0px;margin:0px;}
+.content_background .div-info{height:37rem;margin:0px 10px 20px 10px;border-radius:8px; background-color:#181C41;}
+.content_background .div-info .title{height:4rem;line-height:4rem;vertical-align:middle;padding-left:15px;font-size: 18px;font-weight: 600;color:#03C2EC;text-align: left;}
+.content_background .div-info .content{height:33rem;line-height:4rem;vertical-align:middle;padding-left:15px;}
+.border_div1{height:8rem;line-height:3rem;margin-left:5px;margin-right:5px;vertical-align:middle;text-align:center;color:#fff;background:#22284A;border-radius:6px;float: left;width: 94%;padding-top: 1rem; margin-top: 2rem;}
+.btn-default:focus {
+    background-color: #282C55;
+}
+
+
+
+
+/*   div1   */
+.content_background .div-info .content .base-info table{width:100%;}
+.content_background .div-info .content .base-info table td{width:25%;height:20px;}
+
+.btn1{height:3.5rem;margin-left:5px;margin-right:5px;vertical-align:middle;text-align:center;color:#fff;background:#282C55;border-radius:6px;float: left;width: 94%; margin-top: 2rem; outline:none}
+
+
+
+/*div2*/
+.content_background .div-info .content.staff-info table td{width:33%;height:20px;}
+.border_div2 {height:9rem;line-height:3rem;vertical-align:middle;text-align:center;color:#fff;background:#22284A;border-radius:6px;width: 48%; margin-top: 1rem;padding-top:1rem;}
+.btn2{height:3.5rem;vertical-align:middle;text-align:center;color:#fff;background:#282C55;border-radius:6px;float: left;width: 99%; margin-top: 2rem; outline:none}
+
+
+
+
+/*   div3   */
+.btn3{height:3.5rem;vertical-align:middle;text-align:center;color:#fff;background:#282C55;border-radius:6px;float: left;width: 100%; outline:none}
+.inputText3 {background:#22284A; height: 3rem; width: 96%; border-radius:6px;}
+.border_div3 {height:8.5rem;line-height:3rem;vertical-align:middle;color:#fff;background:#22284A;border-radius:6px;width: 96%; margin-top: 1rem;}
+.content_background .div-info .content.staff-info table{width:100%;}
+
+
+
+
+
+/*div4*/
+.content_background .device-info-col .div-info{height:45rem;}
+.content_background .device-info-col .content{height:41rem;background: url("../img/foot_background.png")no-repeat bottom center;}
+.border_div4{height:23rem;line-height:3rem;margin-left:5px;margin-right:5px;background:#22284A;color:#fff; border-radius:6px;width: 94%; margin-top: 1rem;}
+.inputText4 {background:#22284A; height: 3rem; width: 71%; border-radius:6px;}
+.inputText4_btn {background:#22284A; height: 3rem; width: 46%; border-radius:6px;float: left;margin-top: 1rem;margin-left: 0.5rem}
+
+
+
+/*耗时步骤分析详情*/
+.content_background .time-step-col .div-info{height:45rem;}
+.content_background .time-step-col .content{height:41rem;background: url("../img/foot_background.png")no-repeat bottom center;}
+
+/*t5*/
+.content_background .business-type-time-col .div-info{height:45rem;}
+.content_background .business-type-time-col .content{height:41rem;background: url("../img/foot_background.png")no-repeat bottom center;}
+.inputText5 {background:#22284A; height: 3rem; width: 95%; border-radius:6px;}
+.border_div5 {height:8.5rem;line-height:3rem;vertical-align:middle;color:#fff;background:#22284A;border-radius:6px;width: 95%; margin-top: 1rem;}
+
+

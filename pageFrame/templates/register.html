@@ -1,0 +1,64 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8" />
+		<title>注册</title>
+		<link rel="stylesheet" type="text/css" href="{% static 'css/login_style.css' %}"/>
+        <script src="{% static 'plugins/jquery/jquery.1.11.3.min.js' %}"></script>
+	</head>
+
+	<body>
+		<div class="bg">
+			<div class="wel">RESGISTER</div>
+            <form>
+                {% csrf_token %}
+                <div class="user">
+                    <div id="label" style="">用户名</div>
+                    <input  type="text" name="act" id="act"/>
+                </div>
+                <div class="password" >
+                    <div id="label" >密&nbsp;&nbsp;&nbsp;&nbsp;码</div>
+                    <input class="" type="password" name="pwd" id="pwd" />
+                </div>
+
+
+                <div class="password" style="top: 13rem; left: 3.5rem">
+                    <div id="label" >确认密码</div>
+                    <input class="" style="width: 14.8rem; text-indent: 2.125rem;" type="password" name="rep_pwd" id="rep_pwd" />
+                </div>
+                <span id="error_msg" style="display: inline-block; position:relative; top: 16.4rem; left: 13rem; color: #FF0000"></span>
+                <input class="btn" style="top: 18.5rem" type="button" name="register" value="注册" id="register_btn"/>
+
+            </form>
+
+
+            <script type="text/javascript">
+
+                $(document).ready(function () {
+                   $("#register_btn").click(function () {
+                       var act = $('#act').val();
+                       var pwd = $('#pwd').val();
+                       var rep_pwd = $('#rep_pwd').val();
+                       $.get("/register/res", {'act': act, 'pwd': pwd, 'rep_pwd': rep_pwd}, function (data) {
+
+                            $("#error_msg").html(data);
+                            console.log(data)
+                           if(data === " ") {
+                             alert("注册成功");
+                             console.log(act)
+                             localStorage.setItem('obj', JSON.stringify({name: act}));
+                             window.location="/login/";
+                            }
+                       })
+                   });
+                });
+
+            </script>
+
+
+		</div>
+    </body>
+</html>

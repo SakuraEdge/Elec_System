@@ -1,0 +1,462 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>电力客户行为分析</title>
+    <meta charset="utf-8">
+    <link href="{% static 'plugins/bootstrap-3.3.0/bootstrap.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'css/style.css' %}" rel="stylesheet" type="text/css"/>
+    <script src="{% static 'plugins/echarts/echarts.min.js' %}"></script>
+    <script src="{% static 'plugins/jquery/jquery.1.11.3.min.js' %}"></script>
+    <script src="{% static 'js/event.js' %}"></script>
+</head>
+<body>
+    <div class="container-fluid container-bg content_background">
+        <div class="row  header-info">
+            <div class="col-sm-12 col-md-12 pd  title-info">电力客户行为分析</div>
+            <table style="width:100%;height:48px;">
+	              <tr>
+
+                      <td>
+                          <a style="margin-bottom: 2rem; margin-left: 5rem" class="cust-type-default"  href="/exit/">退出</a>
+                      </td>
+
+	                  <td style="width:15%;">
+                          <a href="/index2/">
+	                        <div id="exchange_btn1" class="cust-type-default right" type="2">></div>
+                          </a>
+                         <div id="exchange_btn2" class="cust-type-default left active" type="1"><</div>
+	                  </td>
+	              </tr>
+              </table>
+        </div>
+
+        <div class="row  header-content">
+            <div class="col-sm-3 col-md-3 pd">
+                <div  class="div-info">
+                    <div class="title">用户缴费数据统计</div>
+                    <div class="content base-info">
+
+                        <div class="border_div1">
+                            <span style="font-size:15px;">一年内的平均缴费金额</span>
+                            <br/>
+                            <!--TODO: 填写平均缴费金额的数据-->
+                            <span style="color:#00A8FE;font-size:18px;font-weight:600;" id="show_avgMoney"></span>
+
+                            <span style="color:#00A8FE;font-size:18px;font-weight:600;">元</span>
+                        </div>
+
+                        <div style="height: 1rem"></div>
+
+                        <div class="border_div1">
+                            <span style="font-size:15px;">一年内的平均缴费次数</span>
+                            <br/>
+
+                            <!--TODO: 填写平均缴费次数的数据-->
+                            <span style="color:#00A8FE;font-size:18px;font-weight:600;" id="show_avgTimes"></span>
+
+                            <span style="color:#00A8FE;font-size:18px;font-weight:600;">次</span>
+                        </div>
+
+
+                        <form method="get" action="/show/avg/data/">
+
+                            <input name="find_data1" type="button" class="btn1 btn-info btn-sm btn-default" id="show_avg_data" value="查询数据"/>
+                        </form>
+
+
+
+                        <a href="../static/file/居民客户的用电缴费习惯分析%201.csv">
+                            <input name="to_csv1" type="submit" class="btn1 btn-info btn-sm btn-default" value="导出为csv文件"/>
+                        </a>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-md-6 pd">
+                <div  class="div-info">
+                    <div class="title">客户类别数据统计</div>
+                    <div class="content">
+                        <div style="width: 40%; height: 100%; float: left">
+
+
+
+                            <div>
+                                <div class="border_div2" style="float: left">
+                                    <span style="font-size:15px;">高价值型客户</span>
+                                    <br/>
+
+{#                                    // TODO： 填写各类人群的人数#}
+                                    <span style="color:#00A8FE;font-size:18px;font-weight:600;" id="high_value_customers"></span>
+
+                                    <span style="color:#00A8FE;font-size:18px;font-weight:600;">人</span>
+                                </div>
+                                <div class="border_div2" style="float: left; margin-left: 1rem;">
+
+                                    <span style="font-size:15px;">大众型客户</span>
+                                    <br/>
+
+
+                                    <span style="color:#00A8FE;font-size:18px;font-weight:600;" id="mass_customers"></span>
+
+                                    <span style="color:#00A8FE;font-size:18px;font-weight:600;">人</span>
+
+                                </div>
+                            </div>
+
+                            <div>
+                                <div class="border_div2" style="float: left">
+
+                                    <span style="font-size:15px;">潜力型客户</span>
+                                    <br/>
+
+                                    <!--TODO: 填写平均缴费次数的数据-->
+                                    <span style="color:#00A8FE;font-size:18px;font-weight:600;" id="potential_customers"></span>
+
+                                    <span style="color:#00A8FE;font-size:18px;font-weight:600;">人</span>
+
+                                </div>
+                                <div class="border_div2" style="float: left; margin-left: 1rem;">
+
+                                    <span style="font-size:15px;">低价值型客户</span>
+                                    <br/>
+
+                                    <!--TODO: 填写平均缴费次数的数据-->
+                                    <span style="color:#00A8FE;font-size:18px;font-weight:600;" id="low_value_customers"></span>
+
+                                    <span style="color:#00A8FE;font-size:18px;font-weight:600;">人</span>
+
+                                </div>
+                            </div>
+
+
+
+                            <form method="get" action="/show/four/classes/data/">
+                                {% csrf_token %}
+                                <input name="find_data2" type="button" class="btn2 btn-info btn-sm btn-default" value="查询数据" id="show_four_classes_data"/>
+                            </form>
+
+
+
+                            <a href="../static/file/居民客户的用电缴费习惯分析%202.csv">
+                                <input name="to_scv2" type="submit" class="btn2 btn-info btn-sm btn-default" value="导出为csv文件"/>
+                            </a>
+
+                        </div>
+
+                        <div style="width: 60%; height: 100%; float: left; padding-left: 6rem;padding-right:2rem; padding-bottom: 2rem" id="container">
+
+                            <span style="display: block; color:#00A8FE;font-size:25px;font-weight:600;text-align: center; margin-top: 11rem;">{{ chart_data }}</span>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-3 col-md-3 pd">
+                <div  class="div-info">
+                    <div class="title">客户类别判断</div>
+                    <div class="content staff-info">
+
+                        <form method="post" action="/index/">
+
+                                {% csrf_token %}
+
+                                <span style="font-size:15px; color: #FFFFFF">平均缴费金额:</span>
+                                <input id="times_pre" name="times_pre" type="text" class="inputText3" style="color: #FFFFFF;" placeholder="请在此处输入客户的平均缴费金额"/>
+
+                                <br/>
+
+                                <span  style="font-size:15px; color: #FFFFFF">平均缴费次数:</span>
+                                <input id="money_pre" name="money_pre" type="text" class="inputText3" style="color: #FFFFFF;" placeholder="请在此处输入客户的平均缴费次数"/>
+
+                                <div style="height: 1rem"></div>
+
+                                <input id="pre" name="get_group" type="button" class="btn-info btn-sm btn-default inputText3" value="判断客户类别"/>
+                            </form>
+
+
+                            <div class="border_div3">
+
+                                <span style="font-size:15px;">该客户的类别为:</span>
+                                <br/>
+
+                                <!--TODO: 填写用户的类别-->
+                                <span style="display: block; color:#00A8FE;font-size:25px;font-weight:600;text-align: center" id="pre_result"></span>
+
+                            </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-3 col-md-3 pd device-info-col">
+                <div  class="div-info">
+                    <div class="title">预测高价值客户TOP5</div>
+                    <div class="content deviceInfo">
+
+                        <div class="border_div4" id="task4" style="padding: 0; margin-bottom: 1rem">
+
+                            <span id="top5_error" style="display: block; color:#00A8FE;font-size:25px;font-weight:600;text-align: center;padding-top: 9rem">{{ chart_data }}</span>
+
+                        </div>
+
+
+                        <span style="margin-left:5px;font-size:15px; color: #FFFFFF; display:inline-block;">所&nbsp;&nbsp;选&nbsp;&nbsp;日&nbsp;&nbsp;期:&nbsp;</span>
+                        <input id="now_date" name="money_pre" type="date" class="inputText4" style="color: #FFFFFF;" value="2018-03-07" />
+                        <br />
+
+
+                        <span  style="margin-left:5px;font-size:15px; color: #FFFFFF; display:inline-block; margin-top: 1rem; margin-bottom: 1rem">预测月份数量:</span>
+                        <input id="month" name="times_pre" type="text" class="inputText4" style="color: #FFFFFF;" placeholder="输入月份范围为1-6"/>
+
+
+                        <input id="pre_top5" type="button" class="btn-info btn-sm btn-default inputText4_btn" value="预测"/>
+
+                         <a href="../static/file/居民客户的用电缴费习惯分析%203.csv">
+                            <input id="pre" type="button" class="btn-info btn-sm btn-default inputText4_btn" value="导出为csv"/>
+                         </a>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-5 col-md-5 pd time-step-col" >
+                <div  class="div-info" style="padding-right: 2rem">
+                    <div class="title">月缴费数据统计</div>
+                    <div class="content" id="avg_echarts"></div>
+
+                    <script>
+
+                        //门店受理详情
+                        function loadChannelHandleDetail(data){
+                            var option3 = {
+                                tooltip: {trigger: 'axis',axisPointer: {lineStyle: {color: '#fff'}}},
+                                legend: {
+                                    icon: 'rect',
+                                    itemWidth: 14,itemHeight: 5,itemGap:10,
+                                    data: ['月缴费次数', '月缴费金额'],
+                                    right: '30px',top: '0px',
+                                    textStyle: {fontSize: 12,color: '#fff'}
+                                },
+                                grid: {x:40,y:50,x2:45,y2:40},
+                                xAxis: [{
+                                    type: 'category',boundaryGap: false,axisLine: {lineStyle: {color: '#57617B'}},axisLabel: {textStyle: {color:'#fff'}},
+                                    data: data.date_lst
+                                }],
+                                yAxis: [{
+                                    type: 'value',
+                                    axisTick: {
+                                        show: false
+                                    },
+                                    axisLine: {lineStyle: {color: '#57617B'}},
+                                    axisLabel: {margin: 10, textStyle: {fontSize: 12}, textStyle: {color:'#fff'},
+                                        formatter: function (value, index) {
+                                        if (value != 0){
+                                            return value / 1000 + "k";
+                                            }
+                                        return 0;
+                                       }},
+                                    splitLine: {lineStyle: {color: '#57617B'}}
+                                },{
+                                    type: 'value',
+                                    axisTick: {
+                                        show: false
+                                    },
+                                    axisLine: {lineStyle: {color: '#57617B'}},
+                                    axisLabel: {margin: 10, textStyle: {fontSize: 12}, textStyle: {color:'#fff'},formatter:'{value}次'},
+                                    splitLine: {show: false,lineStyle: {color: '#57617B'}}
+                                }],
+
+                                series: [{
+                                    name: '月缴费次数',type: 'line',smooth: true,lineStyle: {normal: {width: 2}},
+                                    yAxisIndex:0,
+                                    areaStyle: {
+                                        normal: {
+                                            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                                                offset: 0,
+                                                color: 'rgba(185,150,248,0.3)'
+                                            }, {
+                                                offset: 0.8,
+                                                color: 'rgba(185,150,248,0)'
+                                            }], false),
+                                            shadowColor: 'rgba(0, 0, 0, 0.1)',
+                                            shadowBlur: 10
+                                        }
+                                    },
+                                    itemStyle: {normal: {color: '#77fa93'} },
+                                    markLine : {
+                            　　　　　　data : [
+                            　　　　　　　　{type : 'average', name: '平均值'}
+                            　　　　　　]
+                            　　　　},
+                                    data: data.money_lst
+                                }, {
+                                    name: '月缴费金额',type: 'line',smooth: true,lineStyle: {normal: {width: 2}},
+                                    yAxisIndex:1,
+                                    areaStyle: {
+                                        normal: {
+                                            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                                                offset: 0,
+                                                color: 'rgba(218, 57, 20, 0.3)'
+                                            }, {
+                                                offset: 0.8,
+                                                color: 'rgba(218, 57, 20, 0)'
+                                            }], false),
+                                            shadowColor: 'rgba(0, 0, 0, 0.1)',
+                                            shadowBlur: 10
+                                        }
+                                    },
+                                    itemStyle: {normal: {color: '#03C2EC'}},
+                                    markLine : {
+                            　　　　　　data : [
+                            　　　　　　　　{type : 'average', name: '平均值'}
+                            　　　　　　]
+                            　　　　},
+                                    data: data.times_lst
+                                }]
+
+
+                            };
+                            var chart3 = echarts.init(document.getElementById('avg_echarts'));
+                            chart3.setOption(option3);
+                        }
+
+                        $.get("/show/avg/echarts/", function (data) {
+                             console.log(data)
+                             loadChannelHandleDetail(data);
+                         })
+
+                    </script>
+
+                </div>
+            </div>
+
+            <div class="col-sm-4 col-md-4 pd business-type-time-col">
+                <div  class="div-info">
+                    <div class="title">三种类别用户数据统计</div>
+                    <div id="three_types" class="content"></div>
+
+                    <script type="text/javascript">
+                        function loadBusinessTypeTimeDetail(data){
+                            var maxOrder=Math.max.apply(null,data.avg_power);
+                            var option = {
+                                title : {text:'',subtext:'',top:'3',right:'0'},
+                                tooltip: {trigger: 'axis'},
+                                grid: {left: '8%',right: '8%',bottom: '10%'},
+                                legend: {
+                                    icon: 'rect',
+                                    itemWidth: 14,itemHeight: 5,itemGap:10,
+                                    data: ['人数', '平均缴费金额', '平均用电量'],
+                                    right: '30px',top: '0px',
+                                    textStyle: {fontSize: 12,color: '#fff'}
+                                },
+                                xAxis: {type: 'category',axisLine: {lineStyle: {color: '#57617B'}},axisLabel: {interval:0,textStyle: {color:'#fff',}},data: data.type_lst},
+                                yAxis:[
+                                    {
+                                        type: 'value',name: '',
+                                        axisLine: {lineStyle: {color: '#57617B'}},
+                                        axisLabel: {margin: 10,textStyle: {fontSize: 12},textStyle: {color:'#fff'},formatter:'{value}'},
+                                        splitLine: {show: false}
+                                    },
+                                    {
+                                        type: 'value',name: '',max:maxOrder+parseInt(maxOrder*0.2),
+                                        axisLabel: {margin: 10,textStyle: {fontSize: 12},textStyle: {color:'#fff'},formatter:'{value}'},
+                                        splitLine: {
+                                            show: true,
+                                            lineStyle:{
+                                                type:'dashed',
+                                                color: ['#25CEF3']
+                                            }
+                                        }
+                                    }
+                                ],
+                                series: [
+                                    {
+                                        name:'人数',
+                                        type:'line',
+                                        yAxisIndex:0,
+                                        smooth: true,
+                                        symbolSize:5,
+                                        lineStyle: { normal: {width: 2}},
+                                        areaStyle: {
+                                            normal: {
+                                                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                                                    offset: 0,
+                                                    color: 'rgba(112,255,105,0.8)'
+                                                }, {
+                                                    offset: 0.8,
+                                                    color: 'rgba(230, 48, 123, 0)'
+                                                }], false),
+                                                shadowColor: 'rgba(0, 0, 0, 0.1)',
+                                                shadowBlur: 10
+                                            }
+                                        },
+                                        itemStyle: {normal: { color: '#2ebb57'}},
+                                        data:data.num
+                                    },
+                                    {
+                                        name:'平均缴费金额',
+                                        type:'bar',
+                                        barWidth:12,
+                                        yAxisIndex:1,
+                                        itemStyle : {
+                                            normal: {
+                                                barBorderRadius:[10, 10, 0, 0],
+                                                color: new echarts.graphic.LinearGradient(0, 1, 0, 0, [{
+                                                    offset: 0,
+                                                    color: "rgb(37,126,234)"
+                                                }, {
+                                                    offset: 0.8,
+                                                    color: "rgb(88,166,248)"
+                                                }], false),
+                                                shadowColor: 'rgba(0, 0, 0, 0.1)',
+                                            }
+                                        },
+                                        data:data.avg_money
+                                    },{
+                                        name:'平均用电量',
+                                        type:'bar',
+                                        barWidth:12,
+                                        yAxisIndex:1,
+                                        itemStyle : {
+                                            normal: {
+                                                barBorderRadius:[10, 10, 0, 0],
+                                                color: new echarts.graphic.LinearGradient(0, 1, 0, 0, [{
+                                                    offset: 0,
+                                                    color: "rgb(225,234,124)"
+                                                }, {
+                                                    offset: 0.8,
+                                                    color: "rgba(253,210,110,0.99)"
+                                                }], false),
+                                                shadowColor: 'rgba(0, 0, 0, 0.1)',
+                                            }
+                                        },
+                                        data:data.avg_power
+                                    }
+                                ]
+                            };
+                            var myChart = echarts.init(document.getElementById('three_types'));
+                            myChart.clear();
+                            myChart.setOption(option);
+                        }
+
+                         $.get("/show/three/types/", function (data) {
+                             console.log(data)
+                             loadBusinessTypeTimeDetail(data);
+                         })
+
+                    </script>
+
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</body>
+</html>

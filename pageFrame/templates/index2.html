@@ -1,0 +1,506 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>电力客户行为分析</title>
+    <meta charset="utf-8">
+    <link href="{% static 'plugins/bootstrap-3.3.0/bootstrap.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'css/style.css' %}" rel="stylesheet" type="text/css"/>
+    <script src="{% static 'plugins/echarts/echarts.min.js' %}"></script>
+    <script src="{% static 'plugins/jquery/jquery.1.11.3.min.js' %}"></script>
+    <script src="{% static 'js/event.js' %}"></script>
+</head>
+<body>
+    <div class="container-fluid container-bg content_background">
+        <div class="row  header-info">
+            <div class="col-sm-12 col-md-12 pd  title-info">电力客户行为分析</div>
+            <table style="width:100%;height:48px;">
+	              <tr>
+
+                      <td>
+                          <a style="margin-bottom: 2rem; margin-left: 5rem" class="cust-type-default"  href="/exit/">退出</a>
+                      </td>
+
+	                  <td style="width:15%;">
+
+                        <div id="exchange_btn1" class="cust-type-default right active" type="2" >></div>
+
+                          <a href="/index/">
+                                <div id="exchange_btn2" class="cust-type-default left " type="1"><</div>
+                          </a>
+
+	                  </td>
+	              </tr>
+              </table>
+        </div>
+
+        <div class="row  header-content">
+            <div class="col-sm-3 col-md-3 pd">
+                <div  class="div-info">
+                    <div class="title">Loss Curve</div>
+                    <div class="content base-info" id="loss_line">
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-md-6 pd" style="width: 25%">
+                <div  class="div-info">
+                    <div class="title">任务四</div>
+                    <div class="content">
+
+                        <div class="border_div5" style="height: 72%; padding:1.5rem; margin-bottom: 2rem">
+
+                            <span style="display: block; color:#00A8FE;font-size:25px;font-weight:600;text-align: center"></span>
+
+                            <p id="T4"></p>
+
+                        </div>
+                        <a href="../static/file/send_pkg/model/企业电力营销模型.mdl">
+                            <input type="button" class="btn-info btn-sm btn-default inputText5" value="点击下载企业电力营销模型.mdl"/>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-3 col-md-3 pd" style="width: 25%">
+                <div  class="div-info">
+                    <div class="title">预测所属时段</div>
+                    <div class="content staff-info">
+                         <form method="post" action="/index/">
+
+                                {% csrf_token %}
+
+                                <span style="font-size:15px; color: #FFFFFF">所预测客户的金额:</span><br/>
+                                <input id="power_data" name="power_data" type="text" class="inputText5" style="color: #FFFFFF;" placeholder="请在此处输入所预测客户的金额"/>
+
+                                <br/>
+
+                                <span  style="font-size:15px; color: #FFFFFF">所预测客户的用电量:</span><br>
+                                <input id="money_data" name="money_data" type="text" class="inputText5" style="color: #FFFFFF;" placeholder="请在此处输入所预测客户的用电量"/>
+
+                                <div style="height: 1rem"></div>
+
+                                <input id="pre_type_t5" name="pre_type" type="button" class="btn-info btn-sm btn-default inputText5" value="预测"/>
+                            </form>
+
+
+                            <div class="border_div5">
+
+                                <span style="font-size:15px;">预测结果:</span>
+                                <br/>
+
+                                <!--TODO: 填写用户的类别-->
+                                <span style="display: block; color:#00A8FE;font-size:25px;font-weight:600;text-align: center" id="type_result"></span>
+
+                            </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-3 col-md-3 pd" style="width: 25%">
+                <div  class="div-info">
+                    <div class="title">任务五</div>
+                    <div class="content staff-info">
+
+                        <div class="border_div5" style="height: 72%; padding:1.5rem;  margin-bottom: 2rem">
+
+                            <span style="display: block; color:#00A8FE;font-size:25px;font-weight:600;text-align: center" id="type_result"></span>
+
+                            <p id="T5"></p>
+
+                        </div>
+
+                        <a href="../static/file/send_pkg/model/电力用电量集群分析模型.mdl">
+                            <input type="button" class="btn-info btn-sm btn-default inputText5" style="margin-top: 1rem" value="点击下载电力用电量集群分析模型.mdl"/>
+                        </a>
+
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-sm-3 col-md-3 pd device-info-col">
+                <div  class="div-info">
+                    <div class="title">Accuracy Curve</div>
+                    <div class="content deviceInfo" id="acc_line">
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-5 col-md-5 pd time-step-col" style="width: 50%">
+                <div  class="div-info">
+                    <div class="title">各时段状态统计</div>
+                    <div class="content" id="three_types_echarts"></div>
+
+                </div>
+            </div>
+
+            <div class="col-sm-4 col-md-4 pd business-type-time-col" style="width: 25%">
+                <div  class="div-info">
+                    <div class="title">用电量聚类图</div>
+                    <div id="classification_echarts" class="content"></div>
+
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</body>
+
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+           $("#pre_type_t5").click(function () {
+               var power_data = $('#power_data').val();
+               var money_data = $('#money_data').val();
+                console.log(power_data, money_data);
+               $.get("/show/pre/user/type/", {'power_data': power_data, 'money_data': money_data}, function (data) {
+                   $("#type_result").html(data);
+               })
+           });
+        });
+
+
+
+
+
+        function three_type_cal(data){
+            var maxOrder=Math.max.apply(null,data.time_lst);
+            var option4 = {
+                title : {text:'',subtext:'',top:'3',right:'0'},
+                tooltip: {trigger: 'axis'},
+                grid: {left: '5%',right: '5%',bottom: '10%'},
+                xAxis: {type: 'category',axisLine: {lineStyle: {color: '#57617B'}},axisLabel: {interval:1,textStyle: {color:'#fff',}, formatter:'{value}时'},data: data.time_lst},
+                yAxis:[
+                    {
+                        type: 'value',name: '',
+                        axisLine: {lineStyle: {color: '#57617B'}},
+                        axisLabel: {margin: 0,interval:0.3, textStyle: {fontSize: 12},textStyle: {color:'#fff'},formatter:function (value, index) {
+                                if (value === 0.5){
+                                    value = "低谷 ";
+                                } else if (value === 1.5){
+                                    value = '平段 ';
+                                } else if (value === 2.5){
+                                    value = '高峰 '
+                                } else {
+                                    value = '-'
+                                }
+                                return value;
+                            }},
+                        axisTick:{
+                            show:false, //隐藏坐标轴的刻度
+                        },
+                        splitLine: {show: false}
+                    },
+                    {
+                        type: 'value',name: '',max:maxOrder+parseInt(maxOrder*0.2),
+                        axisLabel: {margin: 10,textStyle: {fontSize: 12},textStyle: {color:'#fff'},formatter:'{value}笔'},
+
+                        splitLine: {
+                            show: true,
+                            lineStyle:{
+                                type:'dashed',
+                                color: ['#25CEF3']
+                            }
+                        }
+                    }
+                ],
+                series: [
+                    {
+                        type:'line',
+                        yAxisIndex:0,
+                        smooth: false,
+                        symbolSize:5,
+                        lineStyle: { normal: {width: 2}},
+                        areaStyle: {
+                            normal: {
+                                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                                    offset: 0,
+                                    color: 'rgba(112,255,105,0.8)'
+                                }, {
+                                    offset: 0.8,
+                                    color: 'rgba(230, 48, 123, 0)'
+                                }], false),
+                                shadowColor: 'rgba(0, 0, 0, 0.1)',
+                                shadowBlur: 10
+                            }
+                        },
+                        itemStyle: {normal: { color: '#2ebb57'}},
+                        data:data.type_cla
+                    }
+
+                ]
+            };
+            var myChart = echarts.init(document.getElementById('three_types_echarts'));
+            myChart.clear();
+            myChart.setOption(option4);
+        }
+
+
+
+
+        function classification_echarts(flag, data){
+            chart6 = echarts.init(document.getElementById("classification_echarts"))
+            count = 0;
+
+            var series = [
+                {
+                    type: 'scatter',
+                    name: '数据2',
+                    data: data,
+                    itemStyle: {
+                        normal: {
+                            color:
+                                function (value) {
+                                    if (flag[count] === 0) {
+                                        value = '#2c47f5'
+                                    } else if (flag[count] === 1) {
+                                        value = '#64db36'
+                                    } else {
+                                        value = '#f6d806'
+                                    }
+                                    count += 1
+                                    return value;
+                                }
+                        }
+                    },
+                },
+            ];
+
+            option4 = {
+                xAxis: {
+                    scale: 'true',   //缩放
+                     spiltLine:{
+                        show:'false',  //想要不显示网格线，改为false
+                     },
+                    axisLabel: {
+                        textStyle: {
+                            color: '#ffffff',
+                        }
+                    }
+                },
+                yAxis: {
+                    scale: 'true',
+                    spiltLine:{
+                        show:'false',  //想要不显示网格线，改为false
+                     },
+                    axisLabel: {
+                        textStyle: {
+                            color: '#ffffff',
+                        }
+                    }
+                },
+                grid:{
+                    show: false
+                },
+
+                series: series,
+            };
+
+            chart6.setOption(option4);
+        }
+
+        function loss_echarts(xLabel, train, val, div_id, flag) {
+            var loss_echarts = echarts.init(document.getElementById(div_id));
+
+
+            option_loss = {
+                color: ['#5CFFDC', '#FFD24A', '#FF4A4A', '#4AA2FF'],
+                tooltip: {
+                    trigger: 'axis',
+                    backgroundColor: 'rgba(0,0,0,0.5)',
+                    borderColor: '#34CEFFBD',
+                    borderWidth: 2,
+                    padding: [5, 10],
+                    formatter: (params) => {
+                        // console.log('params',params)
+                        let str = `${params[0].name}:<br/>`;
+                        //seriesName color value
+                        for (let i = 0; i < params.length; i++) {
+                            str =
+                                str +
+                                `<span style='display:inline-block;margin-right:5px;
+                border-radius:10px;width:9px;height:9px;background-color:${params[i].color}'></span>
+                ${params[i].seriesName}：<i style='float:right;color:#4AEFED ' >${params[i].value.toFixed (5)}</i><br/>`;
+                        }
+                        return str;
+                    },
+                },
+                legend: {
+                    align: 'left',
+                    right: '10%',
+                    top: '10%',
+                    type: 'plain',
+                    textStyle: {
+                        color: '#7ec7ff',
+                        fontSize: 16,
+                    },
+                    // icon:'rect',
+                    itemGap: 25,
+                    itemWidth: 18,
+                    icon: 'path://M0 2a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2z',
+                },
+                grid: {
+                    top: '15%',
+                    left: '10%',
+                    right: '10%',
+                    bottom: '15%',
+                    // containLabel: true
+                },
+                xAxis: [
+                    {
+                        type: 'category',
+                        nameGap: 10,
+                        boundaryGap: false,
+                        nameTextStyle: {
+                            // ---坐标轴名称样式
+                            color: '#E2E8EDE8',
+                            fontSize: 15,
+                        },
+                        axisLabel: {
+                            show: true,
+                            interval: 0, //横轴信息全部显示
+                            // rotate:-30,//-30度角倾斜显示
+                            textStyle: {
+                                color: '#E2E8EDE8', // 更改坐标轴文字颜色
+                                fontSize: this.screenScale * 15, // 更改坐标轴文字大小
+                            },
+                        },
+                        splitLine: {
+                            show: false,
+                        },
+                        axisLine: {
+                            show: true,
+                            lineStyle: {
+                                color: '#379E98AB',
+                            },
+                        },
+                        axisTick: {
+                            show: false,
+                        },
+                        data: xLabel,
+                    },
+                ],
+                yAxis: [
+                    {
+                        nameTextStyle: {
+                            color: '#E2E8EDE8',
+                            fontSize: 16,
+                        },
+                        splitLine: {
+                            show: false,
+                        },
+                        axisTick: {
+                            show: false,
+                        },
+                        axisLine: {
+                            show: false,
+                        },
+                        axisLabel: {
+                            show: true,
+                            // formatter: "{value}"+this.lineData.unit[0],
+                            textStyle: {
+                                color: '#E2E8EDE8', // 更改坐标轴文字颜色
+                                fontSize: 15, // 更改坐标轴文字大小
+                            },
+                        },
+                    },
+                ],
+                series: [
+                    {
+                        name: 'train_' + flag,
+                        type: 'line',
+                        symbol: 'circle', // 默认是空心圆（中间是白色的），改成实心圆
+                        showAllSymbol: true,
+                        symbolSize: 0,
+                        smooth: false,
+                        lineStyle: {
+                            normal: {
+                                width: 5,
+                            },
+                            borderColor: 'rgba(0,0,0,.4)',
+                        },
+                        itemStyle: {
+                            borderColor: '#646ace',
+                            borderWidth: 2,
+                        },
+                        tooltip: {
+                            show: true,
+                        },
+                        data: train,
+                    },
+                    {
+                        name: 'val_' + flag,
+                        type: 'line',
+                        symbol: 'circle', // 默认是空心圆（中间是白色的），改成实心圆
+                        showAllSymbol: true,
+                        symbolSize: 0,
+                        smooth: false,
+                        lineStyle: {
+                            normal: {
+                                width: 5,
+                            },
+                            borderColor: 'rgba(0,0,0,.4)',
+                        },
+                        itemStyle: {
+                            borderColor: '#646ace',
+                            borderWidth: 2,
+                        },
+                        tooltip: {
+                            show: true,
+                        },
+                        data: val,
+                    },
+                ],
+            };
+
+            let len = 0;
+
+            setInterval(() => {
+                if (len === xLabel.length) {
+                    len = 0;
+                }
+                loss_echarts.dispatchAction({
+                    type: 'showTip',
+                    seriesIndex: 0,
+                    dataIndex: len,
+                });
+                len++;
+            }, 1000);
+
+            loss_echarts.setOption(option_loss);
+
+        }
+
+         $.get("/show/two/line/data/", function (data) {
+                    console.log(data)
+                    loss_echarts(data['label'], data['loss_train_lst'], data['loss_val_lst'], 'loss_line', 'loss')
+                    loss_echarts(data['label'], data['acc_train_lst'], data['acc_val_lst'], 'acc_line', 'acc')
+                })
+
+
+        $.get("/show/cla/echarts/data/", function (data) {
+                console.log(data)
+               three_type_cal(data['line_data'])
+                classification_echarts(data['cla_flag'], data['cla_data'])
+           })
+
+        $.get("/show/two/sketches", function (data) {
+                console.log(data)
+               $('#T4').html(data['T4']);
+               $('#T5').html(data['T5']);
+           })
+
+
+
+
+    </script>
+
+
+</html>

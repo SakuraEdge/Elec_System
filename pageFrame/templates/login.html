@@ -1,0 +1,53 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8" />
+		<title>登录</title>
+		<link rel="stylesheet" type="text/css" href="{% static 'css/login_style.css' %}"/>
+        <script src="{% static 'plugins/jquery/jquery.1.11.3.min.js' %}"></script>
+	</head>
+
+	<body>
+
+
+
+
+
+		<div class="bg">
+			<div class="wel">LOGIN</div>
+            <form method="post" action="/login/">
+                {% csrf_token %}
+                <div class="user">
+                    <div id="label" style="">用户名</div>
+                    <input id="login_user" type="text" name="act"  value="" />
+                </div>
+                <div class="password" >
+                    <div id="label" >密&nbsp;&nbsp;&nbsp;码</div>
+                    <input class="" type="password" name="pwd" value="" />
+                </div>
+
+                <input class="btn" style="top: 15rem" type="submit" name="login" value="登录" />
+            </form>
+            <span id="error_msg" style="display: inline-block; position:relative; top: 12.8rem; left: 12.2rem; color: #FF0000">{{ login_err_msg }}</span>
+            <a href="/register/">
+                <input class="btn" style="top: 18.5rem" type="button" name="register" value="注册" />
+            </a>
+		</div>
+
+
+        <script type="text/javascript">
+
+            var obj = JSON.parse(localStorage.getItem('obj'))['name'];
+            console.log(obj);
+            $("#login_user").val(obj);
+            var name = document.getElementById("login_user");
+            name.value = obj;
+            {#localStorage.removeItem('obj');#}
+
+        </script>
+
+    </body>
+</html>
